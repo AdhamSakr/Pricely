@@ -3,12 +3,18 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../styles/Colors";
 
 function Product(props) {
+  const historyProductName = props.title;
+
   return (
     <View style={styles.productView}>
       <TouchableOpacity
-        onPress={() => props.navigation.navigate("SearchResultsScreen")}
+        onPress={() =>
+          props.navigation.navigate("SearchResultsScreen", {
+            historyProductName,
+          })
+        }
       >
-        <Text style={styles.productText}>{props.title}</Text>
+        <Text style={styles.productText}>{JSON.parse(historyProductName)}</Text>
       </TouchableOpacity>
     </View>
   );

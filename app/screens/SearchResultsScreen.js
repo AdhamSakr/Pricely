@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import GlobalStyles from "../styles/GlobalStyles";
 import SearchResultItem from "../components/SearchResultItem";
@@ -31,31 +32,66 @@ SearchResultsScreen = ({ route }) => {
   const [isLoading, setLoading] = useState(true);
   const [productListings, setProductListings] = useState([]);
   const [isError, setError] = useState(false);
+  const historyProductName = route.params.historyProductName;
+  const productName = route.params.productName;
 
   useEffect(() => {
-    fetch(
-      "https://real-time-product-search.p.rapidapi.com/search?q=" +
-        route.params.productName +
-        "&country=uk&language=en",
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        setProductListings(response);
-      })
-      .catch((error) => {
+    const getProductListingsFromHistory = async () => {
+      try {
+        const productListingsFromHistory = await AsyncStorage.getItem(
+          historyProductName
+        );
+        console.log("Showing old search results from Async Storage");
+        setProductListings(JSON.parse(productListingsFromHistory));
+        setLoading(false);
+      } catch (error) {
         setError(true);
         console.error(error);
-      })
-      .finally(() => setLoading(false));
+      }
+    };
+
+    const getProductListingsFromAPI = async () => {
+      try {
+        const response = await fetch(
+          "https://real-time-product-search.p.rapidapi.com/search?q=" +
+            productName +
+            "&country=uk&language=en",
+          options
+        );
+        let productListingsFromAPI = await response.json();
+        setProductListings(productListingsFromAPI);
+        AsyncStorage.setItem(
+          JSON.stringify(productName),
+          JSON.stringify(productListingsFromAPI)
+        );
+        console.log("Added " + productName + " to Async Storage");
+        setLoading(false);
+        console.log(
+          "Showing new search results for " + productName + " from API call"
+        );
+      } catch (error) {
+        setError(true);
+        console.error(error);
+      }
+    };
+
+    if (historyProductName) {
+      getProductListingsFromHistory();
+    } else if (productName) {
+      getProductListingsFromAPI();
+    }
   }, []);
 
   return (
     <View style={GlobalStyles.container}>
       {isLoading ? (
         <Loading />
-      ) : (productListings && productListings.status != "OK") || isError ? (
-        (console.log(productListings), (<Error />))
+      ) : (productName && productListings && productListings.status != "OK") ||
+        isError ? (
+        (console.log(productName),
+        console.log(productListings),
+        console.log(productListings.status),
+        (<Error />))
       ) : (
         <>
           <View style={[GlobalStyles.headerView, { flex: 0.4 }]}>
