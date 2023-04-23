@@ -43,10 +43,10 @@ function HomeScreen({ navigation }) {
         <Text style={styles.text}>OR</Text>
       </View>
       <View style={styles.cameraIconView}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("CameraScreen")}>
           <Image
             source={require("../assets/camera.png")}
-            style={styles.camera}
+            style={styles.cameraIcon}
           />
         </TouchableOpacity>
       </View>
@@ -55,7 +55,7 @@ function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  camera: {
+  cameraIcon: {
     height: 90,
     width: 90,
   },

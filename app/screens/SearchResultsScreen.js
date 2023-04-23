@@ -16,8 +16,6 @@ import Error from "../components/Error";
 
 const options = {
   method: "GET",
-  // url: "https://real-time-product-search.p.rapidapi.com/search",
-  // params: { q: "Nike shoes", country: "uk", language: "en" },
   headers: {
     "X-RapidAPI-Key": "803d2a3700mshd6950d3a60d02e5p1ea178jsn312b100485f2",
     "X-RapidAPI-Host": "real-time-product-search.p.rapidapi.com",
@@ -34,9 +32,11 @@ SearchResultsScreen = ({ route }) => {
   const [isError, setError] = useState(false);
   const historyProductName = route.params.historyProductName;
   const productName = route.params.productName;
+  const detectedObject = route.params.detectedObject;
 
   useEffect(() => {
     const getProductListingsFromHistory = async () => {
+      console.log("Beginning of getProductListingsFromHistory function");
       try {
         const productListingsFromHistory = await AsyncStorage.getItem(
           historyProductName
@@ -48,37 +48,50 @@ SearchResultsScreen = ({ route }) => {
         setError(true);
         console.error(error);
       }
+
+      console.log("End of getProductListingsFromHistory function");
     };
 
-    const getProductListingsFromAPI = async () => {
+    const getProductListingsFromAPI = async (product) => {
+      console.log("Beginning of getProductListingsFromAPI function");
       try {
         const response = await fetch(
           "https://real-time-product-search.p.rapidapi.com/search?q=" +
-            productName +
+            product +
             "&country=uk&language=en",
           options
         );
         let productListingsFromAPI = await response.json();
-        setProductListings(productListingsFromAPI);
-        AsyncStorage.setItem(
-          JSON.stringify(productName),
-          JSON.stringify(productListingsFromAPI)
-        );
-        console.log("Added " + productName + " to Async Storage");
+        if (productListingsFromAPI.status != "OK") {
+          setError(true);
+          console.log("API returned error: " + productListingsFromAPI.message);
+        } else {
+          setProductListings(productListingsFromAPI);
+          AsyncStorage.setItem(
+            JSON.stringify(product),
+            JSON.stringify(productListingsFromAPI)
+          );
+          console.log("Added " + product + " to Async Storage");
+          console.log(
+            "Showing new search results for " + product + " from API call"
+          );
+        }
+
         setLoading(false);
-        console.log(
-          "Showing new search results for " + productName + " from API call"
-        );
       } catch (error) {
         setError(true);
         console.error(error);
       }
+
+      console.log("Beginning of getProductListingsFromAPI function");
     };
 
     if (historyProductName) {
       getProductListingsFromHistory();
     } else if (productName) {
-      getProductListingsFromAPI();
+      getProductListingsFromAPI(productName);
+    } else if (detectedObject) {
+      getProductListingsFromAPI(detectedObject);
     }
   }, []);
 
@@ -86,12 +99,8 @@ SearchResultsScreen = ({ route }) => {
     <View style={GlobalStyles.container}>
       {isLoading ? (
         <Loading />
-      ) : (productName && productListings && productListings.status != "OK") ||
-        isError ? (
-        (console.log(productName),
-        console.log(productListings),
-        console.log(productListings.status),
-        (<Error />))
+      ) : isError ? (
+        <Error />
       ) : (
         <>
           <View style={[GlobalStyles.headerView, { flex: 0.4 }]}>
