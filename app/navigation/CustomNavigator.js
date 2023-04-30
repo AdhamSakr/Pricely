@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CameraScreen from "../screens/CameraScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import HomeScreen from "../screens/HomeScreen";
-import NoInternetScreen from "../screens/NoInternetScreen";
 import SearchResultsScreen from "../screens/SearchResultsScreen";
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +17,6 @@ const HomeScreenNavigator = () => {
         name="SearchResultsScreen"
         component={SearchResultsScreen}
       />
-      <Stack.Screen name="NoInternetScreen" component={NoInternetScreen} />
     </Stack.Navigator>
   );
 };
