@@ -83,9 +83,10 @@ SearchResultsScreen = ({ route }) => {
         console.error(error);
       }
 
-      console.log("Beginning of getProductListingsFromAPI function");
+      console.log("End of getProductListingsFromAPI function");
     };
 
+    // Get product Listings from API or from Async Storage depending on which route parameter is passed.
     if (historyProductName) {
       getProductListingsFromHistory();
     } else if (productName) {

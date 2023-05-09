@@ -15,7 +15,7 @@ function CameraScreen({ navigation }) {
     const getCameraPermission = async () => {
       console.log("Beginning of getCameraPermission function");
       try {
-        // Get permission to access camera
+        // Get permission to access camera.
         const cameraPermission = await Camera.requestCameraPermissionsAsync();
         setStartCamera(cameraPermission.granted);
         if (!cameraPermission.granted) {
@@ -66,7 +66,6 @@ function CameraScreen({ navigation }) {
         const detectedObjects = await response.json();
         setLoading(false);
         console.log(detectedObjects.results);
-        // Check that response status code is a success.
         if (detectedObjects.results[0].status.code != "ok") {
           setError(true);
         } else {
@@ -78,6 +77,7 @@ function CameraScreen({ navigation }) {
           )[0];
           console.log("Object detected by API:");
           console.log(detectedObject);
+          console.log("Navigating to SearchResultsScreen");
           navigation.navigate("SearchResultsScreen", { detectedObject });
         }
       }
@@ -85,8 +85,6 @@ function CameraScreen({ navigation }) {
       setError(true);
       console.error(error);
     }
-
-    //console.log("End of takePicture function");
   };
 
   return (

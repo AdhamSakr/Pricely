@@ -10,6 +10,7 @@ HistoryScreen = ({ navigation }) => {
   const [productSearchHistory, setProductSearchHistory] = useState([]);
 
   useEffect(() => {
+    console.log("Getting all Keys from AsyncStorage");
     AsyncStorage.getAllKeys()
       .then((allKeys) => {
         setProductSearchHistory(allKeys);
