@@ -23,7 +23,7 @@ const HomeScreenNavigator = () => {
 
 export { HomeScreenNavigator };
 
-function SearchHistoryNavigator(props) {
+const SearchHistoryNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HistoryScreen" component={HistoryScreen} />
@@ -33,6 +33,6 @@ function SearchHistoryNavigator(props) {
       />
     </Stack.Navigator>
   );
-}
+};
 
 export { SearchHistoryNavigator };

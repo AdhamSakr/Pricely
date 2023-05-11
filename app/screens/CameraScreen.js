@@ -42,7 +42,7 @@ function CameraScreen({ navigation }) {
         const photo = await camera.takePictureAsync(photoOptions);
         const data = new FormData();
         data.append("image", {
-          uri: photo.uri,
+          uri: photo.uri, // expo-camera saves the photo to the app's cache.
           type: "image/jpeg",
         });
         const options = {

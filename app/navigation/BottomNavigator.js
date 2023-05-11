@@ -6,9 +6,11 @@ import Colors from "../styles/Colors";
 import { HomeScreenNavigator, SearchHistoryNavigator } from "./CustomNavigator";
 
 const Tab = createBottomTabNavigator();
-const buttonOpacity = (props) => <TouchableOpacity {...props} />;
+// tabButton component is passed to the tabBarButton property of the the tab screen components.
+// The props has to be destructured as per https://reactnavigation.org/docs/bottom-tab-navigator/
+const tabButton = (props) => <TouchableOpacity {...props} />;
 
-function BottomNavigator(props) {
+function BottomNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -37,7 +39,7 @@ function BottomNavigator(props) {
               style={styles.icon}
             />
           ),
-          tabBarButton: buttonOpacity,
+          tabBarButton: tabButton,
         }}
       />
       <Tab.Screen
@@ -51,7 +53,7 @@ function BottomNavigator(props) {
               style={styles.icon}
             />
           ),
-          tabBarButton: buttonOpacity,
+          tabBarButton: tabButton,
         }}
       />
     </Tab.Navigator>
