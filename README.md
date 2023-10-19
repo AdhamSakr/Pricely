@@ -6,3 +6,13 @@ The app can search for a product using the product name or by taking a photo of 
 This app utilizes 2 APIs from Rapid API.
 The first API is called "Real Time Product Search API" which is used to return a list of websites selling the searched product with their prices, image and a url for that website.
 The second API is called "General Detection API" which is used to detect the name of the product in the photo captured by the mobile phone to be used as an alternate way of search.
+
+## Screens
+Home Screen.
+Search Results Screen.
+History Screen.
+Camera Screen.
+
+## Navigators
+Bottom Navigator.
+Custom Navigator.
